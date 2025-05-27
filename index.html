@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veterinaria</title>
+    <link rel="stylesheet" href="box.css">
+</head>
+<body>  
+<header>Veterinaria SunnyPaws</header>
+
+<div class="container" id="form-container">
+  <form id="register-form">
+    <h3>Crear cuenta</h3>
+    <label>Nombre de usuario</label>
+    <input type="text" id="usuario" required />
+
+    <label>Correo electrónico</label>
+    <input type="email" id="correo" required />
+
+    <label>Contraseña</label>
+    <div class="toggle">
+      <input type="password" id="password" required />
+      <span class="toggle-icon" onclick="togglePassword()">👁</span>
+    </div>
+
+    <small class="error" id="pass-error"></small>
+    <button type="submit">Registrarse</button>
+  </form>
+
+  <form id="login-form" style="display:none">
+    <h3>Iniciar sesión</h3>
+    <label>Usuario</label>
+    <input type="text" id="login-usuario" required />
+    <label>Contraseña</label>
+    <input type="password" id="login-password" required />
+    <small><a href="#">¿Olvidaste tu contraseña?</a></small>
+    <button type="submit">Entrar</button>
+  </form>
+
+  <form id="cita-form" style="display:none">
+    <h3>Agendar Cita Médica</h3>
+    <label>Nombre del dueño</label>
+    <input type="text" id="duenio" required />
+
+    <label>Nombre de la mascota</label>
+    <input type="text" id="mascota" required />
+
+    <label>Fecha</label>
+    <input type="date" id="fecha" required />
+
+    <label>Hora</label>
+    <input type="time" id="hora" required />
+
+    <label>Síntomas</label>
+    <textarea id="sintomas" required></textarea>
+
+    <button type="submit">Confirmar Cita</button>
+  </form>
+
+  <div id="resultado" style="display:none">
+    <h3>✅ Cita Confirmada</h3>
+    <p id="resumen"></p>
+  </div>
+</div>
+<script>
+  const passwordInput = document.getElementById('password');
+  const errorPass = document.getElementById('pass-error');
+
+  function togglePassword() {
+    passwordInput.type = passwordInput.type === "password" ? "text" : "password";
+  }
+
+  // VALIDACIÓN DE REGISTRO
+  document.getElementById("register-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    const usuario = document.getElementById("usuario").value;
+    const correo = document.getElementById("correo").value;
+    const pass = passwordInput.value;
+
+    // Expresión regular para contraseña segura
+    const regex = /^(?=.[A-Z])(?=.\d)(?=.[!@#$%^&]).{8}$/;
+
+    if (!regex.test(pass)) {
+      errorPass.textContent = "Contraseña inválida (8 caracteres, 1 mayúscula, 1 número, 1 símbolo)";
+      return;
+    }
+
+    errorPass.textContent = ""; // limpia error si está todo bien
+    alert("Registro exitoso. Ahora puedes iniciar sesión.");
+    this.style.display = "none";
+    document.getElementById("login-form").style.display = "block";
+  });
+
+  // VALIDACIÓN DE LOGIN
+  document.getElementById("login-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    const user = document.getElementById("login-usuario").value;
+    const pass = document.getElementById("login-password").value;
+
+    // Validación básica simulada
+    if (user === "admin" && pass === "Admin123!") {
+      alert("Inicio de sesión correcto.");
+      this.style.display = "none";
+      document.getElementById("cita-form").style.display = "block";
+    } else {
+      alert("Credenciales incorrectas. Usa admin / Admin123!");
+    }
+  });
+
+  // ENVÍO DE FORMULARIO DE CITA
+  document.getElementById("cita-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const duenio = document.getElementById("duenio").value;
+    const mascota = document.getElementById("mascota").value;
+    const fecha = document.getElementById("fecha").value;
+    const hora = document.getElementById("hora").value;
+    const sintomas = document.getElementById("sintomas").value;
+
+    const ficha = Math.floor(Math.random() * 9000 + 1000); // número aleatorio
+
+    const resumen = `
+      <strong>Dueño:</strong> ${duenio}<br>
+      <strong>Mascota:</strong> ${mascota}<br>
+      <strong>Fecha:</strong> ${fecha}<br>
+      <strong>Hora:</strong> ${hora}<br>
+      <strong>Síntomas:</strong> ${sintomas}<br><br>
+      ✅ Cita confirmada. Su número de ficha es: <strong>${ficha}</strong>
+    `;
+
+    document.getElementById("cita-form").style.display = "none";
+    document.getElementById("resultado").style.display = "block";
+    document.getElementById("resumen").innerHTML = resumen;
+  });
+</script>
+</body>
+</html>
